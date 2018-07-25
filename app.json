@@ -3,7 +3,7 @@
     "pages/index/index",
     "pages/movies/movies",
     "pages/books/books",
-    "pages/likes/likes"
+    "pages/article/article"
   ],
   "window": {
     "backgroundTextStyle": "light",
@@ -32,7 +32,7 @@
       "iconPath": "/image/icon/suji.png",
       "selectedIconPath": "/image/icon/suji_s.png"
       }, {
-      "pagePath": "pages/likes/likes",
+      "pagePath": "pages/article/article",
       "text": "美文",
       "iconPath": "/image/icon/weizhang.png",
       "selectedIconPath": "/image/icon/weizhang_s.png"
