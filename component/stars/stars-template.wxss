@@ -1,0 +1,7 @@
+.img-box {
+  display: flex;
+}
+img {
+  width: 64rpx;
+  height: 64rpx;
+}

@@ -1,0 +1,14 @@
+<import src="../movie-item/movie-template.wxml"></import>
+<template name="movieListTemplate">
+  <view >
+    <view >
+      <text>1111</text>
+      <text>更多></text>
+    </view>
+    <view >
+      <template is="movieTemplate"></template>
+      <template is="movieTemplate"></template>
+      <template is="movieTemplate"></template>
+    </view>
+  </view>
+</template>

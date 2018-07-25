@@ -1,0 +1,6 @@
+<import src="/component/movie-list/movie-list-template"></import>
+<view class="box">
+  <template is="movieListTemplate"></template>
+  <template is="movieListTemplate"></template>
+  <template is="movieListTemplate"></template>
+</view>
