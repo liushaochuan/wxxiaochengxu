@@ -1,6 +1,6 @@
 <import src="/component/movie-list/movie-list-template"></import>
 <view class="box">
-  <template is="movieListTemplate"></template>
-  <template is="movieListTemplate"></template>
-  <template is="movieListTemplate"></template>
+  <block wx:for="{{moviesList}}" wx:for-item="movies">
+    <template is="movieListTemplate" data="{{...movies}}"></template>
+  </block>
 </view>

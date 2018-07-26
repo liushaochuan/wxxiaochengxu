@@ -1,3 +1,5 @@
 /* pages/movies/movies.wxss */
+@import "/component/movie-list/movie-list-template.wxss";
 .box {
+  background-color: #f2f2f2;
 }

@@ -1,8 +1,8 @@
-<import src="../stars/stars-template.wxml"></import>
+<import src="../stars/stars-template.wxml" />
 <template name="movieTemplate">
-  <view >
-    <image  />
-    <text ></text>
-    <template is="starsTemplate"></template>
+  <view class="movie-box">
+    <image class="movie-img" src="{{coverUrl}}"/>
+    <text class="movie-title">{{title}}</text>
+    <template is="starsTemplate" data="{{rating}}"></template>
   </view>
 </template>

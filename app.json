@@ -1,7 +1,8 @@
 {
   "pages": [
-    "pages/index/index",
     "pages/movies/movies",
+    "pages/index/index",
+    
     "pages/books/books",
     "pages/article/article"
   ],
