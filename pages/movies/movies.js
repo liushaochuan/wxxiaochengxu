@@ -24,6 +24,7 @@ Page({
     // this.getMovieListData(comingUrl);
     // this.getMovieListData(inTheatersUrl);
   },
+  // 请求电影列表
   getMovieListData(data) {
     const that = this;
     const url = app.globalData.baseUrl + data.url
@@ -37,6 +38,7 @@ Page({
       success(res) {
         res.data.headerTitle = data.headerTitle;
         res.data.index = data.index;
+        res.data.url = data.url.split('?')[0]
         that.processData(res.data);
       },
       fail(err) {
@@ -45,10 +47,12 @@ Page({
       complete() {}
     })
   },
+  // 数据处理
   processData (data) {
     const movies = [];
     data.subjects.forEach(movie => {
       var title = movie.title.length >= 6 ? movie.title.substring(0,6) + '...' : movie.title
+      movie.rating.stars = parseInt(movie.rating.stars)
       movies.push ({
         title,
         coverUrl: movie.images.large,
@@ -58,11 +62,26 @@ Page({
     });
     var key =  "moviesList[" + data.index + "]"
     this.setData({
-      [key] : {movies, headerTitle: data.headerTitle}
+      [key] : {movies, headerTitle: data.headerTitle, url: data.url}
     })
-    console.log(this.data)
+    // 对象处理方式
+    // var str = 'person.name';
+    // this.setData({
+    //   [str]: 'fxjzzyo'
+    // })
   },
-
+  // 跳转到更多页面
+  gotoMore(event) {
+    wx.navigateTo({
+      url: '/pages/more-movies/more-movies?' + 'url=' + event.target.dataset.url + '&title=' + event.target.dataset.title,
+      // success(res) {
+      //   console.log(res)
+      // },
+      // fail(error) {
+      //   console.log(error)
+      // }
+    })
+  },
   /**
    * 生命周期函数--监听页面初次渲染完成
    */

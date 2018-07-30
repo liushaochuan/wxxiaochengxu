@@ -2,9 +2,9 @@
   "pages": [
     "pages/movies/movies",
     "pages/index/index",
-    
     "pages/books/books",
-    "pages/article/article"
+    "pages/article/article",
+    "pages/more-movies/more-movies"
   ],
   "window": {
     "backgroundTextStyle": "light",

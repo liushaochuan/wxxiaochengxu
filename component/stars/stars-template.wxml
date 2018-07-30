@@ -6,7 +6,7 @@
           <image class="star-img star-img-dark" src="/image/icon/star_dark.png" />
         </block>
       </view>
-      <view class="star-light-box" style="width: {{rating.average * 10 + '%'}}">
+      <view class="star-light-box" style="width: {{rating.stars * 2 + '%'}}">
         <block wx:for="{{5}}" wx:for-index="index" wx:key="{{index}}">
           <image class="star-img star-img-light" src="/image/icon/star_light.png" />
         </block>
