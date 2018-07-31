@@ -6,26 +6,73 @@ Page({
    * 页面的初始数据
    */
   data: {
-  
+    searchList: [],
+    openSearch: false,
+    searchQuery: {
+      url: '/v2/movie/search',
+      parameter: {
+        q: '',
+        start: 0,
+        count: 12
+      }
+    }
   },
-
-  /**
-   * 生命周期函数--监听页面加载
-   */
-  onLoad: function (options) {
-    const top250Url = {url: "/v2/movie/top250" + "?start=0" + "&count=3", headerTitle: "口碑榜", index: 0}; // 口碑榜
-    const comingUrl =  {url: "/v2/movie/coming_soon" + "?start=0" + "&count=3", headerTitle: "即将上映", index: 1}; // 即将上映
-    const inTheatersUrl =  {url: "/v2/movie/in_theaters" + "?start=0" + "&count=3", headerTitle: "正在热映", index: 2}; // 正在热映
-    const urlList = [top250Url, comingUrl, inTheatersUrl]
-    urlList.forEach(data => {
-      this.getMovieListData(data)
+  onFocus(event) {
+    this.setData({
+      openSearch: true
     })
-    // this.getMovieListData(top250Url);
-    // this.getMovieListData(comingUrl);
-    // this.getMovieListData(inTheatersUrl);
+    this.getMovieListBySearch(this.data.searchQuery);
   },
-  // 请求电影列表
-  getMovieListData(data) {
+  clear() {
+    this.setData({
+      openSearch: false,
+      ["searchQuery.parameter.q"]: '',
+      searchList: []
+    });
+  },
+  onInput(event) {
+    this.setData({
+      ["searchQuery.parameter.q"]: event.detail.value,
+      ["searchQuery.parameter.start"]: 0,
+      searchList: []
+    })
+    this.getMovieListBySearch(this.data.searchQuery);
+  },
+  onScrollLower() {
+    this.getMovieListBySearch(this.data.searchQuery);
+  },
+  bindButtonTap() {
+    this.setData({
+      focus: true
+    })
+  },
+  getMovieListBySearch(data) {
+    var arr = [];
+    for(var pa in data.parameter) {
+      arr.push(pa + '=' + data.parameter[pa])
+    }
+    const url = app.globalData.baseUrl + data.url + '?' + arr.join('&');
+    const that = this;
+    wx.request({
+      url,
+      method: 'GET',
+      header: {
+        "Content-Type": "application/json"
+      },
+      success: (res)=>{
+        that.setData({
+          searchList: that.data.searchList.concat(that.processData(res.data)),
+        })
+        console.log( that.data.searchList.length)
+        that.setData({
+          ["searchQuery.parameter.start"]: that.data.searchList.length
+        })
+      },
+      fail: ()=>{}
+    });
+  },
+   // 请求电影列表
+   getMovieListData(data) {
     const that = this;
     const url = app.globalData.baseUrl + data.url
     wx.request({
@@ -36,10 +83,10 @@ Page({
         "Content-Type": "application/json"
       },
       success(res) {
-        res.data.headerTitle = data.headerTitle;
-        res.data.index = data.index;
-        res.data.url = data.url.split('?')[0]
-        that.processData(res.data);
+        var key =  "moviesList[" + data.index + "]"
+        that.setData({
+          [key] : {movies: that.processData(res.data), headerTitle: res.data.headerTitle, url:  data.url.split('?')[0]}
+        })
       },
       fail(err) {
         console.log(err)
@@ -60,17 +107,9 @@ Page({
         rating: movie.rating
       })
     });
-    var key =  "moviesList[" + data.index + "]"
-    this.setData({
-      [key] : {movies, headerTitle: data.headerTitle, url: data.url}
-    })
-    // 对象处理方式
-    // var str = 'person.name';
-    // this.setData({
-    //   [str]: 'fxjzzyo'
-    // })
+    return movies;
   },
-  // 跳转到更多页面
+  // 跳转到更多电影页面
   gotoMore(event) {
     wx.navigateTo({
       url: '/pages/more-movies/more-movies?' + 'url=' + event.target.dataset.url + '&title=' + event.target.dataset.title,
@@ -80,6 +119,18 @@ Page({
       // fail(error) {
       //   console.log(error)
       // }
+    })
+  },
+  /**
+   * 生命周期函数--监听页面加载
+   */
+  onLoad: function (options) {
+    const top250Url = {url: "/v2/movie/top250" + "?start=0" + "&count=3", headerTitle: "口碑榜", index: 0}; // 口碑榜
+    const comingUrl =  {url: "/v2/movie/coming_soon" + "?start=0" + "&count=3", headerTitle: "即将上映", index: 1}; // 即将上映
+    const inTheatersUrl =  {url: "/v2/movie/in_theaters" + "?start=0" + "&count=3", headerTitle: "正在热映", index: 2}; // 正在热映
+    const urlList = [top250Url, comingUrl, inTheatersUrl]
+    urlList.forEach(data => {
+      this.getMovieListData(data)
     })
   },
   /**
