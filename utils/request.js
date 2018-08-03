@@ -1,13 +1,16 @@
-export default request = () => {
+export function httpGet(url, callback) {
   wx.request({
-    url: '',
-    data: '',
-    header: {},
+    url: url,
     method: 'GET',
-    dataType: 'json',
-    responseType: 'text',
-    success: function (res) {},
-    fail: function (res) {},
-    complete: function (res) {},
-  })
+    data: {},
+    header: {
+      "Content-Type": "application/json"
+    },
+    success: (res)=> {
+      return callback(res)
+    },
+    fail: (error)=>{
+      console.log(error)
+    }
+  });
 }

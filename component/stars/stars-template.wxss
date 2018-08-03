@@ -1,16 +1,10 @@
 .star-box {
-  margin-bottom: 20rpx;
+  height: 30rpx;
+  width: 200rpx;
 }
 .star-img-box {
-  width: 65%;
-  position: relative;
-  top: -10rpx;
-}
-.star-light-box,.star-dark-box {
-  height: 50rpx;
-  position: absolute;
-  overflow: hidden;
-  top: 0rpx;
+  height: 30rpx;
+  float: left;
 }
 .star-img {
   height: 26rpx;

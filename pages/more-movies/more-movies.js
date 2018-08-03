@@ -1,4 +1,6 @@
 // pages/more-movies/more-movies.js
+import {gotoMovieDetail} from "../../utils/page"
+import {httpGet} from "../../utils/request"
 var app = getApp()
 Page({
 
@@ -29,33 +31,18 @@ Page({
   },
   getMovieListData(data) {
     wx.showNavigationBarLoading()
-    const that = this;
     let parameter = [];
     for (var key in data.parameter) {
       parameter.push(key + '=' + data.parameter[key]);
     }
     parameter = parameter.join('&')
-    const url = app.globalData.baseUrl + data.url;
-
-    wx.request({
-      url: url + '?' + parameter,
-      data: {},
-      method: "GET",
-      header: {
-        "Content-Type": "application/json"
-      },
-      success(res) {
-        that.processData(res);
-      },
-      fail(err) {
-        console.log(err)
-      },
-      complete() {}
-    })
+    const url = app.globalData.baseUrl + data.url + "?" + parameter;
+    httpGet(url, this.processData)
   },
   onScrollLower(event) {
     this.getMovieListData(this.data.urlAndParam)
   },
+  gotoMovieDetail,
   /**
    * 生命周期函数--监听页面加载
    */

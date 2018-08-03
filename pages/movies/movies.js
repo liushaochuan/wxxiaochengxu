@@ -1,4 +1,6 @@
 // pages/movies/movies.js
+import { gotoMovieDetail } from "../../utils/page"
+import {httpGet} from "../../utils/request"
 const app = getApp();
 Page({
 
@@ -7,6 +9,7 @@ Page({
    */
   data: {
     searchList: [],
+    moviesList: [],
     openSearch: false,
     searchQuery: {
       url: '/v2/movie/search',
@@ -46,35 +49,27 @@ Page({
       focus: true
     })
   },
+  success (res){
+    this.setData({
+      searchList: this.data.searchList.concat(this.processData(res.data)),
+    })
+    this.setData({
+      ["searchQuery.parameter.start"]: this.data.searchList.length
+    })
+  },
   getMovieListBySearch(data) {
     var arr = [];
     for(var pa in data.parameter) {
       arr.push(pa + '=' + data.parameter[pa])
     }
     const url = app.globalData.baseUrl + data.url + '?' + arr.join('&');
-    const that = this;
-    wx.request({
-      url,
-      method: 'GET',
-      header: {
-        "Content-Type": "application/json"
-      },
-      success: (res)=>{
-        that.setData({
-          searchList: that.data.searchList.concat(that.processData(res.data)),
-        })
-        console.log( that.data.searchList.length)
-        that.setData({
-          ["searchQuery.parameter.start"]: that.data.searchList.length
-        })
-      },
-      fail: ()=>{}
-    });
+    httpGet(url, this.success)
   },
    // 请求电影列表
    getMovieListData(data) {
     const that = this;
-    const url = app.globalData.baseUrl + data.url
+    const url = app.globalData.baseUrl + data.url;
+    // httpGet(url)
     wx.request({
       url: url,
       data: {},
@@ -85,7 +80,7 @@ Page({
       success(res) {
         var key =  "moviesList[" + data.index + "]"
         that.setData({
-          [key] : {movies: that.processData(res.data), headerTitle: res.data.headerTitle, url:  data.url.split('?')[0]}
+          [key] : {movies: that.processData(res.data), headerTitle: data.headerTitle, url:  data.url.split('?')[0]},
         })
       },
       fail(err) {
@@ -98,7 +93,7 @@ Page({
   processData (data) {
     const movies = [];
     data.subjects.forEach(movie => {
-      var title = movie.title.length >= 6 ? movie.title.substring(0,6) + '...' : movie.title
+      var title = movie.title.length >= 6 ? movie.title.substring(0,6) + '…' : movie.title
       movie.rating.stars = parseInt(movie.rating.stars)
       movies.push ({
         title,
@@ -109,16 +104,11 @@ Page({
     });
     return movies;
   },
+  gotoMovieDetail,
   // 跳转到更多电影页面
   gotoMore(event) {
     wx.navigateTo({
-      url: '/pages/more-movies/more-movies?' + 'url=' + event.target.dataset.url + '&title=' + event.target.dataset.title,
-      // success(res) {
-      //   console.log(res)
-      // },
-      // fail(error) {
-      //   console.log(error)
-      // }
+      url: '/pages/more-movies/more-movies?url=' + event.target.dataset.url + '&title=' + event.target.dataset.title,
     })
   },
   /**
@@ -131,6 +121,9 @@ Page({
     const urlList = [top250Url, comingUrl, inTheatersUrl]
     urlList.forEach(data => {
       this.getMovieListData(data)
+    })
+    this.setData({
+      urlList
     })
   },
   /**
