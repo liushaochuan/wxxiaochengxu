@@ -23,7 +23,6 @@ Page({
   gotoSearch(event) {
     const name = event.currentTarget.dataset.name
     wx.switchTab({
-
     })
   },
   /**
@@ -36,7 +35,13 @@ Page({
    * 生命周期函数--监听页面初次渲染完成
    */
   onReady: function () {
-  
+    var that = this;
+    wx.setNavigationBarTitle({
+      title: that.data.title,
+      fail(error) {
+        console.log(error)
+      }
+    })
   },
 
   /**
