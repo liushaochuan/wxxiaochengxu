@@ -1,6 +1,6 @@
 // pages/movies/movies.js
 import { gotoMovieDetail } from "../../utils/page"
-import {httpGet} from "../../utils/request"
+import { httpGet, wxPromise, post, get } from "../../utils/request"
 const app = getApp();
 Page({
 
@@ -64,11 +64,15 @@ Page({
     }
     const url = app.globalData.baseUrl + data.url + '?' + arr.join('&');
     httpGet(url, this.success)
+    get(data.url, data.parameter).then(res => {
+      console.log("res", res)
+    })
   },
    // 请求电影列表
    getMovieListData(data) {
     const that = this;
     const url = app.globalData.baseUrl + data.url;
+    console.log(url)
     // httpGet(url)
     wx.request({
       url: url,

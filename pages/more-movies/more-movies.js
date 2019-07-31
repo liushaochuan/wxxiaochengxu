@@ -1,6 +1,7 @@
 // pages/more-movies/more-movies.js
 import {gotoMovieDetail} from "../../utils/page"
-import {httpGet} from "../../utils/request"
+import { httpGet, wxPromise, post, get } from "../../utils/request"
+var util = require("../../utils/wxpromise.js")
 var app = getApp()
 Page({
 
@@ -47,6 +48,20 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
+    var login1 = wxPromise(wx.login);
+    login1().then(res => {
+      console.log('res', res)
+    })
+    // wxPromise(wx.request)({
+    //   url: "",
+    //   method: 'GET',
+    //   data: {},
+    // });
+    // var login = util.wxPromisify(wx.login);
+    // login({
+    // }).then(res => {
+    //   console.log(res)
+    // })
     const urlAndParam = {
       url: options.url,
       parameter: {
